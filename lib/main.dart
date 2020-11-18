@@ -40,7 +40,7 @@ class _DrawerState extends State<Drawer> {
     Colors.orange,
     Colors.red,
     Colors.black,
-    Colors.pink
+    Colors.pink,
   ];
 
   @override
@@ -49,94 +49,95 @@ class _DrawerState extends State<Drawer> {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(8),
         child: Container(
-            padding: EdgeInsets.only(
-              left: 8,
-              right: 8,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              color: Colors.blue.shade300,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      IconButton(
-                          icon: Icon(
-                            Icons.brush_sharp,
-                          ),
-                          onPressed:() {
-                            setState(() {
-                              if(selectedMode == SelectedMode.StrokeWidth)
-                                showBottomList = !showBottomList;
-                              selectedMode = SelectedMode.StrokeWidth;
-                            });
-                          }
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.opacity,
-                          ),
-                          onPressed:() {
-                            setState(() {
-                              if(selectedMode == SelectedMode.Opacity)
-                                showBottomList = !showBottomList;
-                              selectedMode = SelectedMode.Opacity;
-                            });
-                          }
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.color_lens_outlined,
-                          ),
-                          onPressed:() {
-                            setState(() {
-                              if(selectedMode == SelectedMode.Color)
-                                showBottomList = !showBottomList;
-                              selectedMode = SelectedMode.Color;
-                            });
-                          }
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.close_rounded,
-                          ),
-                          onPressed:() {
-                            setState(() {
-                              showBottomList = false;
-                              points.clear();
-                            });
-                          }
-                      ),
-                    ],
-                  ),
-                  Visibility(
-                    child:(selectedMode == SelectedMode.Color)
-                        ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: getColorList(),
-                    ) : Slider(
-                        value:(selectedMode == SelectedMode.StrokeWidth) ? strokeWidth : opacity,
-                        max:(selectedMode == SelectedMode.StrokeWidth) ? 50.0 : 1.0,
-                        min: 0.0,
-                        onChanged:(val) {
+          padding: EdgeInsets.only(
+            left: 8,
+            right: 8,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: Colors.blue.shade300,
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    IconButton(
+                        icon: Icon(
+                          Icons.brush_sharp,
+                        ),
+                        onPressed:() {
                           setState(() {
                             if(selectedMode == SelectedMode.StrokeWidth)
-                              strokeWidth = val;
-                            else
-                              opacity = val;
+                              showBottomList = !showBottomList;
+                            selectedMode = SelectedMode.StrokeWidth;
                           });
                         }
                     ),
-                    visible: showBottomList,
+                    IconButton(
+                        icon: Icon(
+                          Icons.opacity,
+                        ),
+                        onPressed:() {
+                          setState(() {
+                            if(selectedMode == SelectedMode.Opacity)
+                              showBottomList = !showBottomList;
+                            selectedMode = SelectedMode.Opacity;
+                          });
+                        }
+                    ),
+                    IconButton(
+                        icon: Icon(
+                          Icons.color_lens_outlined,
+                        ),
+                        onPressed:() {
+                          setState(() {
+                            if(selectedMode == SelectedMode.Color)
+                              showBottomList = !showBottomList;
+                            selectedMode = SelectedMode.Color;
+                          });
+                        }
+                    ),
+                    IconButton(
+                        icon: Icon(
+                          Icons.close_rounded,
+                        ),
+                        onPressed:() {
+                          setState(() {
+                            showBottomList = false;
+                            points.clear();
+                          });
+                        }
+                    ),
+                  ],
+                ),
+                Visibility(
+                  child:(selectedMode == SelectedMode.Color) ?
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: getColorList(),
+                  ) :
+                  Slider(
+                    value:(selectedMode == SelectedMode.StrokeWidth) ? strokeWidth : opacity,
+                    max:(selectedMode == SelectedMode.StrokeWidth) ? 50.0 : 1.0,
+                    min: 0.0,
+                    onChanged:(val) {
+                      setState(() {
+                        if(selectedMode == SelectedMode.StrokeWidth)
+                          strokeWidth = val;
+                        else
+                          opacity = val;
+                      });
+                    },
                   ),
-                ],
-              ),
-            )
+                  visible: showBottomList,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
       body: GestureDetector(
@@ -202,7 +203,7 @@ class _DrawerState extends State<Drawer> {
           context: context,
           child: AlertDialog(
             title: Text(
-              'Pick a color!',
+              'Pick a color',
             ),
             content: SingleChildScrollView(
               child: ColorPicker(
@@ -290,7 +291,8 @@ class DrawCreater extends CustomPainter {
           pointsList[i+1].points,
           pointsList[i].paint,
         );
-      }else if(pointsList[i] != null && pointsList[i+1] == null) {
+      }
+      else if(pointsList[i] != null && pointsList[i+1] == null) {
         offsetPoints.clear();
         offsetPoints.add(
           pointsList[i].points,
