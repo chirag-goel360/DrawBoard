@@ -21,6 +21,9 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  rxdart:
+  esys_flutter_share:
+  path_provider:
   flutter:
     sdk: flutter
 

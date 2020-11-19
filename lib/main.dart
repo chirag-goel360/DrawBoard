@@ -1,4 +1,7 @@
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -30,6 +33,7 @@ class _DrawWorkerState extends State<DrawWorker> {
   bool showBottomList = false;
   double opacity = 1.0;
   StrokeCap strokeCap = (Platform.isAndroid) ? StrokeCap.butt : StrokeCap.round;
+  GlobalKey globalKey = new GlobalKey();
   SelectedMode selectedMode = SelectedMode.StrokeWidth;
   List<Color> colors = [
     Colors.purple,
@@ -46,6 +50,19 @@ class _DrawWorkerState extends State<DrawWorker> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "DrawBoard",
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.share,
+            ),
+            onPressed: sharecode,
+          ),
+        ],
+      ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(8),
         child: Container(
@@ -180,14 +197,39 @@ class _DrawWorkerState extends State<DrawWorker> {
             points.add(null);
           });
         },
-        child: CustomPaint(
-          size: Size.infinite,
-          painter: DrawingCreater(
-            pointsList: points,
+        child: RepaintBoundary(
+          key: globalKey,
+          child: Container(
+            color: Colors.white,
+            child: CustomPaint(
+              size: Size.infinite,
+              painter: DrawingCreater(
+                pointsList: points,
+              ),
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> sharecode() async{
+    try{
+      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+      var item = await boundary.toImage();
+      ByteData byteData = await item.toByteData(
+        format: ImageByteFormat.png,
+      );
+      await Share.file(
+        'esys image',
+        'qrcode.png',
+        byteData.buffer.asUint8List(),
+        'image/png',
+      );
+    }
+    catch(e){
+      print(e.toString());
+    }
   }
 
   getColorList() {
