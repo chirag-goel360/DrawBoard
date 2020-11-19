@@ -4,25 +4,25 @@ import 'dart:ui';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 void main() => runApp(
-  DrawApp(),
+  DrawingApp(),
 );
 
-class DrawApp extends StatelessWidget {
+class DrawingApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Drawer(),
+      home: DrawWorker(),
     );
   }
 }
 
-class Drawer extends StatefulWidget {
+class DrawWorker extends StatefulWidget {
   @override
-  _DrawerState createState() => _DrawerState();
+  _DrawWorkerState createState() => _DrawWorkerState();
 }
 
-class _DrawerState extends State<Drawer> {
+class _DrawWorkerState extends State<DrawWorker> {
   Color selectedColor = Colors.black;
   Color pickerColor = Colors.black;
   double strokeWidth = 3.0;
@@ -182,7 +182,7 @@ class _DrawerState extends State<Drawer> {
         },
         child: CustomPaint(
           size: Size.infinite,
-          painter: DrawCreater(
+          painter: DrawingCreater(
             pointsList: points,
           ),
         ),
@@ -277,8 +277,8 @@ class _DrawerState extends State<Drawer> {
   }
 }
 
-class DrawCreater extends CustomPainter {
-  DrawCreater({this.pointsList});
+class DrawingCreater extends CustomPainter {
+  DrawingCreater({this.pointsList});
   List<DrawingPoints> pointsList;
   List<Offset> offsetPoints = List();
 
@@ -313,7 +313,7 @@ class DrawCreater extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(DrawCreater oldDelegate) => true;
+  bool shouldRepaint(DrawingCreater oldDelegate) => true;
 }
 
 class DrawingPoints {
