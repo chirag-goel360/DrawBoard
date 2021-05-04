@@ -52,19 +52,6 @@ class _DrawWorkerState extends State<DrawWorker> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "DrawBoard",
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.share,
-            ),
-            onPressed: sharecode,
-          ),
-        ],
-      ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(8),
         child: Container(
@@ -85,50 +72,54 @@ class _DrawWorkerState extends State<DrawWorker> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     IconButton(
-                      icon: Icon(
-                        Icons.brush_sharp,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          if (selectedMode == SelectedMode.StrokeWidth)
-                            showBottomList = !showBottomList;
-                          selectedMode = SelectedMode.StrokeWidth;
-                        });
-                      },
-                    ),
+                        icon: Icon(
+                          Icons.brush_sharp,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (selectedMode == SelectedMode.StrokeWidth)
+                              showBottomList = !showBottomList;
+                            selectedMode = SelectedMode.StrokeWidth;
+                          });
+                        }),
+                    IconButton(
+                        icon: Icon(
+                          Icons.opacity,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (selectedMode == SelectedMode.Opacity)
+                              showBottomList = !showBottomList;
+                            selectedMode = SelectedMode.Opacity;
+                          });
+                        }),
+                    IconButton(
+                        icon: Icon(
+                          Icons.color_lens_outlined,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (selectedMode == SelectedMode.Color)
+                              showBottomList = !showBottomList;
+                            selectedMode = SelectedMode.Color;
+                          });
+                        }),
+                    IconButton(
+                        icon: Icon(
+                          Icons.close_rounded,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            showBottomList = false;
+                            points.clear();
+                          });
+                        }),
                     IconButton(
                       icon: Icon(
-                        Icons.opacity,
+                        Icons.save,
                       ),
                       onPressed: () {
-                        setState(() {
-                          if (selectedMode == SelectedMode.Opacity)
-                            showBottomList = !showBottomList;
-                          selectedMode = SelectedMode.Opacity;
-                        });
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.color_lens_outlined,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          if (selectedMode == SelectedMode.Color)
-                            showBottomList = !showBottomList;
-                          selectedMode = SelectedMode.Color;
-                        });
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.close_rounded,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          showBottomList = false;
-                          points.clear();
-                        });
+                        sharecode();
                       },
                     ),
                   ],
@@ -247,34 +238,36 @@ class _DrawWorkerState extends State<DrawWorker> {
       onTap: () {
         showDialog(
           context: context,
-          builder: (_) => AlertDialog(
-            title: Text(
-              'Pick a color',
-            ),
-            content: SingleChildScrollView(
-              child: ColorPicker(
-                pickerColor: pickerColor,
-                onColorChanged: (color) {
-                  pickerColor = color;
-                },
-                showLabel: true,
-                pickerAreaHeightPercent: 0.8,
+          builder: (_) {
+            return AlertDialog(
+              title: Text(
+                'Pick a color',
               ),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  'Save',
+              content: SingleChildScrollView(
+                child: ColorPicker(
+                  pickerColor: pickerColor,
+                  onColorChanged: (color) {
+                    pickerColor = color;
+                  },
+                  //showLabel: true,
+                  pickerAreaHeightPercent: 0.8,
                 ),
-                onPressed: () {
-                  setState(() {
-                    selectedColor = pickerColor;
-                  });
-                  Navigator.of(context).pop();
-                },
               ),
-            ],
-          ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text(
+                    'Save',
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      selectedColor = pickerColor;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
         );
       },
       child: ClipOval(
@@ -286,11 +279,7 @@ class _DrawWorkerState extends State<DrawWorker> {
           width: 36,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                Colors.red,
-                Colors.green,
-                Colors.blue,
-              ],
+              colors: [Colors.red, Colors.green, Colors.blue],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -324,9 +313,7 @@ class _DrawWorkerState extends State<DrawWorker> {
 }
 
 class DrawingCreater extends CustomPainter {
-  DrawingCreater({
-    this.pointsList,
-  });
+  DrawingCreater({this.pointsList});
   List<DrawingPoints> pointsList;
   List<Offset> offsetPoints = List();
 
@@ -366,10 +353,7 @@ class DrawingCreater extends CustomPainter {
 class DrawingPoints {
   Paint paint;
   Offset points;
-  DrawingPoints({
-    this.points,
-    this.paint,
-  });
+  DrawingPoints({this.points, this.paint});
 }
 
 enum SelectedMode {
