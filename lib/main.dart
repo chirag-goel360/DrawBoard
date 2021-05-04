@@ -6,9 +6,11 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-void main() => runApp(
-  DrawingApp(),
-);
+void main() {
+  runApp(
+    DrawingApp(),
+  );
+}
 
 class DrawingApp extends StatelessWidget {
   @override
@@ -83,73 +85,77 @@ class _DrawWorkerState extends State<DrawWorker> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     IconButton(
-                        icon: Icon(
-                          Icons.brush_sharp,
-                        ),
-                        onPressed:() {
-                          setState(() {
-                            if(selectedMode == SelectedMode.StrokeWidth)
-                              showBottomList = !showBottomList;
-                            selectedMode = SelectedMode.StrokeWidth;
-                          });
-                        }
+                      icon: Icon(
+                        Icons.brush_sharp,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (selectedMode == SelectedMode.StrokeWidth)
+                            showBottomList = !showBottomList;
+                          selectedMode = SelectedMode.StrokeWidth;
+                        });
+                      },
                     ),
                     IconButton(
-                        icon: Icon(
-                          Icons.opacity,
-                        ),
-                        onPressed:() {
-                          setState(() {
-                            if(selectedMode == SelectedMode.Opacity)
-                              showBottomList = !showBottomList;
-                            selectedMode = SelectedMode.Opacity;
-                          });
-                        }
+                      icon: Icon(
+                        Icons.opacity,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (selectedMode == SelectedMode.Opacity)
+                            showBottomList = !showBottomList;
+                          selectedMode = SelectedMode.Opacity;
+                        });
+                      },
                     ),
                     IconButton(
-                        icon: Icon(
-                          Icons.color_lens_outlined,
-                        ),
-                        onPressed:() {
-                          setState(() {
-                            if(selectedMode == SelectedMode.Color)
-                              showBottomList = !showBottomList;
-                            selectedMode = SelectedMode.Color;
-                          });
-                        }
+                      icon: Icon(
+                        Icons.color_lens_outlined,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (selectedMode == SelectedMode.Color)
+                            showBottomList = !showBottomList;
+                          selectedMode = SelectedMode.Color;
+                        });
+                      },
                     ),
                     IconButton(
-                        icon: Icon(
-                          Icons.close_rounded,
-                        ),
-                        onPressed:() {
-                          setState(() {
-                            showBottomList = false;
-                            points.clear();
-                          });
-                        }
+                      icon: Icon(
+                        Icons.close_rounded,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          showBottomList = false;
+                          points.clear();
+                        });
+                      },
                     ),
                   ],
                 ),
                 Visibility(
-                  child:(selectedMode == SelectedMode.Color) ?
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: getColorList(),
-                  ) :
-                  Slider(
-                    value:(selectedMode == SelectedMode.StrokeWidth) ? strokeWidth : opacity,
-                    max:(selectedMode == SelectedMode.StrokeWidth) ? 50.0 : 1.0,
-                    min: 0.0,
-                    onChanged:(val) {
-                      setState(() {
-                        if(selectedMode == SelectedMode.StrokeWidth)
-                          strokeWidth = val;
-                        else
-                          opacity = val;
-                      });
-                    },
-                  ),
+                  child: (selectedMode == SelectedMode.Color)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: getColorList(),
+                        )
+                      : Slider(
+                          value: (selectedMode == SelectedMode.StrokeWidth)
+                              ? strokeWidth
+                              : opacity,
+                          max: (selectedMode == SelectedMode.StrokeWidth)
+                              ? 50.0
+                              : 1.0,
+                          min: 0.0,
+                          onChanged: (val) {
+                            setState(() {
+                              if (selectedMode == SelectedMode.StrokeWidth)
+                                strokeWidth = val;
+                              else
+                                opacity = val;
+                            });
+                          },
+                        ),
                   visible: showBottomList,
                 ),
               ],
@@ -158,7 +164,7 @@ class _DrawWorkerState extends State<DrawWorker> {
         ),
       ),
       body: GestureDetector(
-        onPanUpdate:(details) {
+        onPanUpdate: (details) {
           setState(() {
             RenderBox renderBox = context.findRenderObject();
             points.add(
@@ -170,12 +176,11 @@ class _DrawWorkerState extends State<DrawWorker> {
                     ..strokeCap = strokeCap
                     ..isAntiAlias = true
                     ..color = selectedColor.withOpacity(opacity)
-                    ..strokeWidth = strokeWidth
-              ),
+                    ..strokeWidth = strokeWidth),
             );
           });
         },
-        onPanStart:(details) {
+        onPanStart: (details) {
           setState(() {
             RenderBox renderBox = context.findRenderObject();
             points.add(
@@ -187,12 +192,11 @@ class _DrawWorkerState extends State<DrawWorker> {
                     ..strokeCap = strokeCap
                     ..isAntiAlias = true
                     ..color = selectedColor.withOpacity(opacity)
-                    ..strokeWidth = strokeWidth
-              ),
+                    ..strokeWidth = strokeWidth),
             );
           });
         },
-        onPanEnd:(details) {
+        onPanEnd: (details) {
           setState(() {
             points.add(null);
           });
@@ -213,9 +217,10 @@ class _DrawWorkerState extends State<DrawWorker> {
     );
   }
 
-  Future<void> sharecode() async{
-    try{
-      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+  Future<void> sharecode() async {
+    try {
+      RenderRepaintBoundary boundary =
+          globalKey.currentContext.findRenderObject();
       var item = await boundary.toImage();
       ByteData byteData = await item.toByteData(
         format: ImageByteFormat.png,
@@ -226,31 +231,30 @@ class _DrawWorkerState extends State<DrawWorker> {
         byteData.buffer.asUint8List(),
         'image/png',
       );
-    }
-    catch(e){
+    } catch (e) {
       print(e.toString());
     }
   }
 
   getColorList() {
     List<Widget> listWidget = List();
-    for(Color color in colors) {
+    for (Color color in colors) {
       listWidget.add(
         colorCircle(color),
       );
     }
     Widget colorPicker = GestureDetector(
-      onTap:() {
+      onTap: () {
         showDialog(
           context: context,
-          child: AlertDialog(
+          builder: (_) => AlertDialog(
             title: Text(
               'Pick a color',
             ),
             content: SingleChildScrollView(
               child: ColorPicker(
                 pickerColor: pickerColor,
-                onColorChanged:(color) {
+                onColorChanged: (color) {
                   pickerColor = color;
                 },
                 showLabel: true,
@@ -262,7 +266,7 @@ class _DrawWorkerState extends State<DrawWorker> {
                 child: Text(
                   'Save',
                 ),
-                onPressed:() {
+                onPressed: () {
                   setState(() {
                     selectedColor = pickerColor;
                   });
@@ -285,7 +289,7 @@ class _DrawWorkerState extends State<DrawWorker> {
               colors: [
                 Colors.red,
                 Colors.green,
-                Colors.blue
+                Colors.blue,
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -300,7 +304,7 @@ class _DrawWorkerState extends State<DrawWorker> {
 
   Widget colorCircle(Color color) {
     return GestureDetector(
-      onTap:() {
+      onTap: () {
         setState(() {
           selectedColor = color;
         });
@@ -320,28 +324,29 @@ class _DrawWorkerState extends State<DrawWorker> {
 }
 
 class DrawingCreater extends CustomPainter {
-  DrawingCreater({this.pointsList});
+  DrawingCreater({
+    this.pointsList,
+  });
   List<DrawingPoints> pointsList;
   List<Offset> offsetPoints = List();
 
   @override
   void paint(Canvas canvas, Size size) {
-    for(int i=0; i < pointsList.length-1; i++) {
-      if(pointsList[i] != null && pointsList[i+1] != null) {
+    for (int i = 0; i < pointsList.length - 1; i++) {
+      if (pointsList[i] != null && pointsList[i + 1] != null) {
         canvas.drawLine(
           pointsList[i].points,
-          pointsList[i+1].points,
+          pointsList[i + 1].points,
           pointsList[i].paint,
         );
-      }
-      else if(pointsList[i] != null && pointsList[i+1] == null) {
+      } else if (pointsList[i] != null && pointsList[i + 1] == null) {
         offsetPoints.clear();
         offsetPoints.add(
           pointsList[i].points,
         );
         offsetPoints.add(
           Offset(
-            pointsList[i].points.dx+0.1,
+            pointsList[i].points.dx + 0.1,
             pointsList[i].points.dy + 0.1,
           ),
         );
@@ -361,7 +366,10 @@ class DrawingCreater extends CustomPainter {
 class DrawingPoints {
   Paint paint;
   Offset points;
-  DrawingPoints({this.points, this.paint});
+  DrawingPoints({
+    this.points,
+    this.paint,
+  });
 }
 
 enum SelectedMode {
