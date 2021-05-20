@@ -31,7 +31,7 @@ class _DrawWorkerState extends State<DrawWorker> {
   Color selectedColor = Colors.black;
   Color pickerColor = Colors.black;
   double strokeWidth = 3.0;
-  List<DrawingPoints> points = List();
+  List<DrawingPoints> points = [];
   bool showBottomList = false;
   double opacity = 1.0;
   StrokeCap strokeCap = (Platform.isAndroid) ? StrokeCap.butt : StrokeCap.round;
@@ -228,7 +228,7 @@ class _DrawWorkerState extends State<DrawWorker> {
   }
 
   getColorList() {
-    List<Widget> listWidget = List();
+    List<Widget> listWidget = [];
     for (Color color in colors) {
       listWidget.add(
         colorCircle(color),
@@ -254,7 +254,7 @@ class _DrawWorkerState extends State<DrawWorker> {
                 ),
               ),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child: Text(
                     'Save',
                   ),
@@ -315,7 +315,7 @@ class _DrawWorkerState extends State<DrawWorker> {
 class DrawingCreater extends CustomPainter {
   DrawingCreater({this.pointsList});
   List<DrawingPoints> pointsList;
-  List<Offset> offsetPoints = List();
+  List<Offset> offsetPoints = [];
 
   @override
   void paint(Canvas canvas, Size size) {
